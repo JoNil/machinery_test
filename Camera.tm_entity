@@ -1,0 +1,43 @@
+__type: "tm_entity"
+__uuid: "1ef393d7-e747-1c59-c654-bb7827cd7d36"
+name: "Camera"
+components: [
+	{
+		__type: "tm_transform_component"
+		__uuid: "16585cd2-87aa-6133-76e5-25e957716303"
+		position: {
+			__uuid: "cf41ca22-0bba-ec66-40ee-b67a7c8a5889"
+		}
+		rotation: {
+			__uuid: "a5f673b8-3263-2566-ea35-d7669f22ff73"
+		}
+		scale: {
+			__uuid: "73508b73-e347-eef2-966d-c2f910424cc1"
+		}
+	}
+	{
+		__type: "tm_link_component"
+		__uuid: "1576a8c5-e0f4-fedd-6f41-ad41e6fe16ac"
+		position: {
+			__uuid: "21d34011-4f97-4715-d07d-1159074f9a5c"
+			y: 20
+		}
+		rotation: {
+			__uuid: "97341260-2674-df85-9497-d2ccd469028b"
+			x: -0.7071067690849304
+			w: 0.7071067690849304
+		}
+		scale: {
+			__uuid: "d892e515-aa22-4ac9-f403-98e03352b5e2"
+		}
+	}
+	{
+		__type: "tm_camera_component"
+		__uuid: "ad81b539-1702-b302-1750-74b099e36496"
+		near_plane: 1
+		far_plane: 100000
+		vertical_fov: 1.29154360294342
+	}
+]
+sort_order: 101
+__asset_uuid: "f2d12faf-8722-8ba7-be5e-6ce42a98677b"

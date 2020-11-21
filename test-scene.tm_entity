@@ -91,7 +91,7 @@ components: [
 					data: {
 						__type: "tm_local_entity_asset_reference"
 						__uuid: "975e9a69-f41d-f5c2-8628-10e6bbc01b3a"
-						entity: "3eaa510f-b197-4bff-3b14-51a6610de7b7"
+						entity: "3d143dc6-5fb2-fc14-da75-227ecdfc1490"
 					}
 				}
 				{
@@ -3755,7 +3755,7 @@ children: [
 						}
 					}
 				]
-				sort_order: 102
+				sort_order: 101
 			}
 		]
 		children__instantiated: [
@@ -3781,7 +3781,7 @@ children: [
 				name: "3p camera"
 			}
 		]
-		sort_order: 101
+		sort_order: 102
 	}
 	{
 		__uuid: "3ecf0877-1c4d-94de-2fc7-3d5ea8f33eee"
@@ -3831,7 +3831,35 @@ children: [
 				}
 			}
 		]
-		sort_order: 102
+		sort_order: 103
+	}
+	{
+		__uuid: "3d143dc6-5fb2-fc14-da75-227ecdfc1490"
+		__prototype_type: "tm_entity"
+		__prototype_uuid: "1ef393d7-e747-1c59-c654-bb7827cd7d36"
+		components__instantiated: [
+			{
+				__type: "tm_link_component"
+				__uuid: "e2b76c1f-09c2-eeb0-ea09-6bcdfaa40a5d"
+				__prototype_type: "tm_link_component"
+				__prototype_uuid: "1576a8c5-e0f4-fedd-6f41-ad41e6fe16ac"
+				position: {
+					__uuid: "caebaf96-1c60-9056-5c2d-c49cf796ebc1"
+					__prototype_type: "tm_position"
+					__prototype_uuid: "21d34011-4f97-4715-d07d-1159074f9a5c"
+				}
+				rotation: {
+					__uuid: "520d64d8-5a5c-5264-bcf0-21474ac05080"
+					__prototype_type: "tm_rotation"
+					__prototype_uuid: "97341260-2674-df85-9497-d2ccd469028b"
+				}
+				scale: {
+					__uuid: "589db3bd-2ae7-772e-bd5a-bcaee1845812"
+					__prototype_type: "tm_scale"
+					__prototype_uuid: "d892e515-aa22-4ac9-f403-98e03352b5e2"
+				}
+			}
+		]
 	}
 ]
 __asset_uuid: "aeddabf3-17fd-f5ed-c7fb-d70787bb498b"

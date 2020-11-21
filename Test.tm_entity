@@ -72,6 +72,7 @@ children: [
 				spot_inner_angle: 0.0872664600610733
 				spot_outer_angle: 1.570796370506287
 				cast_shadows: true
+				shadow_depth_bias: 0.001000000047497451
 				area_extent: {
 					__uuid: "bcacb1be-9ed3-ab17-3358-8d37e39071fc"
 					x: 1
@@ -355,3 +356,4 @@ children: [
 		sort_order: 100
 	}
 ]
+__asset_uuid: "79dc82c7-43b5-e964-251b-a28ffda37f72"
