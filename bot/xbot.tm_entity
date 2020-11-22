@@ -815,7 +815,7 @@ components: [
 				}
 				{
 					__uuid: "436e6c81-4a89-6bca-c8da-51a9a13f39d7"
-					type: "tm_set_local_transform"
+					type: "tm_set_transform"
 					position_x: 345
 					position_y: 270
 				}
@@ -852,9 +852,9 @@ components: [
 				}
 				{
 					__uuid: "8e1d7551-64bc-9a2f-03b2-a6d8e0e0189f"
-					type: "tm_get_local_transform"
+					type: "tm_get_transform"
 					position_x: 135
-					position_y: 330
+					position_y: 329.0584716796875
 				}
 				{
 					__uuid: "804f41bc-3a20-632f-3836-2041db209c49"
@@ -864,13 +864,13 @@ components: [
 				}
 				{
 					__uuid: "7deea6dc-fff3-c8fe-56db-e5bcd4310cc5"
-					type: "tm_get_local_transform"
+					type: "tm_get_transform"
 					position_x: 135
 					position_y: 1320
 				}
 				{
 					__uuid: "a295b630-8865-80b1-bd5a-e52dc0e25b19"
-					type: "tm_set_local_transform"
+					type: "tm_set_transform"
 					position_x: 345
 					position_y: 600
 				}
@@ -901,13 +901,13 @@ components: [
 				}
 				{
 					__uuid: "90799da5-fa92-b88f-7d00-b5a4fb23057e"
-					type: "tm_get_local_transform"
+					type: "tm_get_transform"
 					position_x: 135
 					position_y: 660
 				}
 				{
 					__uuid: "2f3a3f0c-efd9-e57a-ca8b-a1d9b2d8fe82"
-					type: "tm_set_local_transform"
+					type: "tm_set_transform"
 					position_x: 345
 					position_y: 930
 				}
@@ -938,15 +938,15 @@ components: [
 				}
 				{
 					__uuid: "f8d8d61b-e277-359e-72fe-672754fa4cb8"
-					type: "tm_get_local_transform"
+					type: "tm_get_transform"
 					position_x: 135
 					position_y: 990
 				}
 				{
 					__uuid: "39f2426d-e1c3-fbc7-79b8-bd88a23eb83f"
-					type: "tm_set_local_transform"
+					type: "tm_set_transform"
 					position_x: 345
-					position_y: 1260
+					position_y: 1258.116943359375
 				}
 				{
 					__uuid: "8eae224f-8ad4-7ef1-495c-437d0d629b7f"
