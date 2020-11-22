@@ -3861,5 +3861,36 @@ children: [
 			}
 		]
 	}
+	{
+		__uuid: "5c6982c3-be0d-84bb-ad3d-223c576b90f7"
+		__prototype_type: "tm_entity"
+		__prototype_uuid: "442589c2-1987-8642-9434-fae3e6d4c085"
+		components__instantiated: [
+			{
+				__type: "tm_link_component"
+				__uuid: "5304df00-3c62-f7ec-163c-9f6c17345ff3"
+				__prototype_type: "tm_link_component"
+				__prototype_uuid: "98be5df7-8c52-7453-9f75-e21f83c94c4e"
+				position: {
+					__uuid: "cf4b69c8-dc4e-4fd3-c831-cdb958aeb15a"
+					__prototype_type: "tm_position"
+					__prototype_uuid: "606cedf0-b5b4-37cf-ae1f-ba9a7156c447"
+					x: -5.087909698486328
+					y: 1.145804882049561
+					z: 2.724488496780396
+				}
+				rotation: {
+					__uuid: "fa706fad-684f-5d86-a7c4-9435f4e07fbf"
+					__prototype_type: "tm_rotation"
+					__prototype_uuid: "88a6f9ef-dcfb-46cc-e13d-454f463d772a"
+				}
+				scale: {
+					__uuid: "e67233c7-a6ef-ae76-9bde-c59e4dfd5507"
+					__prototype_type: "tm_scale"
+					__prototype_uuid: "656e1f11-a95e-fc6f-b7b3-4a5c82fe9499"
+				}
+			}
+		]
+	}
 ]
 __asset_uuid: "aeddabf3-17fd-f5ed-c7fb-d70787bb498b"
