@@ -44,8 +44,8 @@ components: [
 					{
 						__uuid: "7e4af4c1-1395-940c-9a21-1a7d7aac1b0c"
 						type: "lit_output"
-						position_x: -18.99946403503418
-						position_y: -361.3367614746094
+						position_x: -43.20773696899414
+						position_y: -304.2743530273438
 						settings: {
 							__type: "tm_shader_system_compiled_result"
 							__uuid: "16ba60de-11d7-2cc2-4527-8fc13e33ef36"
@@ -301,6 +301,21 @@ components: [
 						}
 					]
 				}
+			}
+		}
+	}
+	{
+		__type: "tm_physics_shape_component"
+		__uuid: "41cb943d-b588-9ea1-1575-73e95572483e"
+		type: 4
+		shape: {
+			__type: "tm_physics_shape_box"
+			__uuid: "7fe3667b-dc11-5ec0-231b-34730e5fbe98"
+			half_extent: {
+				__uuid: "bde3d1fc-55ee-46a8-f45b-a3c632501eb3"
+				x: 0.5
+				y: 0.5
+				z: 0.5
 			}
 		}
 	}
