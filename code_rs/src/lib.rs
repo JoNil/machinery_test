@@ -8,5 +8,5 @@ pub unsafe extern "C" fn tm_load_plugin(reg: *mut tm::tm_api_registry_api, load:
 
     api::register::<LogApi>(reg);
 
-    api::get::<LogApi>().print_info("Hej");
+    api::get::<LogApi>().print_info("Hej 2");
 }
