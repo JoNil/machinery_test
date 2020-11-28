@@ -94,14 +94,14 @@ static void engine_update__cave_component(tm_engine_o *inst, tm_engine_update_se
 
         for (uint32_t i = 0; i < a->n; ++i)
         {
-            tm_graph_interpreter_wire_content_t dist_wire = tm_graph_interpreter_api->read_variable(graph_component->gr, GRAPH_DIST_HASH);
+            tm_graph_interpreter_wire_content_t dist_wire = tm_graph_interpreter_api->read_variable(graph_component[i].gr, GRAPH_DIST_HASH);
 
             if (dist_wire.data != NULL)
             {
                 float distance_to_wall = *(float *)dist_wire.data;
                 float hue = (sinf(0.4f * distance_to_wall) + 1.0f) / 2.0f;
                 TM_LOG("HUE: %f", hue);
-                light_component->color_rgb = tm_hue_to_rgb(hue);
+                light_component[i].color_rgb = tm_hue_to_rgb(hue);
             }
         }
     }
