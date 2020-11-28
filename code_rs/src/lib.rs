@@ -17,10 +17,7 @@ use tm_rs::{entity::EntityApi, log::LogApi};
 
 static COMPONENT_NAME: &str = "light_distance_component";
 
-unsafe extern "C" fn engine_update(
-    inst: *mut tm::tm_engine_o,
-    data: *mut tm::tm_engine_update_set_t,
-) {
+fn engine_update(data: *mut tm::tm_engine_update_set_t) {
     api::get::<LogApi>().info("Update 2");
 
     /*for (tm_engine_update_array_t *a = data->arrays; a < data->arrays + data->num_arrays; ++a)
@@ -43,18 +40,7 @@ unsafe extern "C" fn engine_update(
     }*/
 }
 
-unsafe extern "C" fn engine_filter(
-    _inst: *mut tm::tm_engine_o,
-    components: *const u32,
-    num_components: u32,
-    mask: *const tm::tm_component_mask_t,
-) -> bool {
-    if num_components < 2 {
-        return false;
-    }
-
-    let components = slice::from_raw_parts(components, num_components as usize);
-
+fn engine_filter(components: &[u32], mask: &tm::tm_component_mask_t) -> bool {
     entity::mask_has_component(mask, components[0])
         && entity::mask_has_component(mask, components[1])
 }
@@ -72,10 +58,10 @@ unsafe extern "C" fn register_engine(ctx: *mut tm::tm_entity_context_o) {
         disabled: false,
         num_components: 2,
         components: &[light_component, graph_component],
-        excludes: &[false],
+        excludes: &[false, false],
         writes: &[true, false],
         update: engine_update,
-        filter: engine_filter,
+        filter: Some(engine_filter),
     };
 
     entity_api.register_engine(engine);
