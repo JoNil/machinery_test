@@ -1,4 +1,4 @@
-use tm_rs::{api, ffi as tm, registry::RegistryApi};
+use tm_rs::{api, ffi as tm, hash, registry::RegistryApi};
 use tm_rs::{entity::EntityApi, log::LogApi};
 
 unsafe extern "C" fn engine_update(
@@ -40,10 +40,12 @@ unsafe extern "C" fn engine_filter(
 unsafe extern "C" fn register_engine(ctx: *mut tm::tm_entity_context_o) {
     //assert!(!ctx.is_null());
 
-    let entity_api = api::with_ctx::<EntityApi>(ctx);
+    let mut entity_api = api::with_ctx::<EntityApi>(ctx);
 
-    let light_component = entity_api.lookup_component(tm::TM_TT_TYPE_HASH__LIGHT_COMPONENT);
-    let graph_component = entity_api.lookup_component(tm::TM_TT_TYPE_HASH__GRAPH_COMPONENT);
+    let light_component = entity_api.lookup_component(hash(tm::TM_TT_TYPE__LIGHT_COMPONENT));
+    let graph_component = entity_api.lookup_component(hash(tm::TM_TT_TYPE__GRAPH_COMPONENT));
+
+    api::get::<LogApi>().info(&format!("{:x}", hash(tm::TM_TT_TYPE__LIGHT_COMPONENT)));
 
     /*const uint32_t cave_component = tm_entity_api->lookup_component(ctx, TM_TT_TYPE_HASH__CAVE_COMPONENT);
     const uint32_t light_component = tm_entity_api->lookup_component(ctx, TM_TT_TYPE_HASH__LIGHT_COMPONENT);
