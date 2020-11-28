@@ -1,10 +1,28 @@
-use tm_rs::{api, ffi as tm, hash, registry::RegistryApi};
+use std::{
+    os::raw::c_char,
+    slice,
+    time::{Instant, SystemTime},
+};
+
+use tm_rs::{
+    api,
+    entity::{self, Engine},
+    ffi as tm,
+    ffi::tm_engine_i,
+    ffi::tm_engine_o,
+    hash,
+    registry::RegistryApi,
+};
 use tm_rs::{entity::EntityApi, log::LogApi};
+
+static COMPONENT_NAME: &str = "light_distance_component";
 
 unsafe extern "C" fn engine_update(
     inst: *mut tm::tm_engine_o,
     data: *mut tm::tm_engine_update_set_t,
 ) {
+    api::get::<LogApi>().info("Update 2");
+
     /*for (tm_engine_update_array_t *a = data->arrays; a < data->arrays + data->num_arrays; ++a)
     {
         struct tm_light_component_t *light_component = a->components[1];
@@ -26,43 +44,41 @@ unsafe extern "C" fn engine_update(
 }
 
 unsafe extern "C" fn engine_filter(
-    inst: *mut tm::tm_engine_o,
+    _inst: *mut tm::tm_engine_o,
     components: *const u32,
     num_components: u32,
     mask: *const tm::tm_component_mask_t,
 ) -> bool {
-    /*tm_entity_mask_has_component(mask, components[0]) &&
-    tm_entity_mask_has_component(mask, components[1]) &&
-    tm_entity_mask_has_component(mask, components[2])*/
-    false
+    if num_components < 2 {
+        return false;
+    }
+
+    let components = slice::from_raw_parts(components, num_components as usize);
+
+    entity::mask_has_component(mask, components[0])
+        && entity::mask_has_component(mask, components[1])
 }
 
 unsafe extern "C" fn register_engine(ctx: *mut tm::tm_entity_context_o) {
-    //assert!(!ctx.is_null());
+    assert!(!ctx.is_null());
 
     let mut entity_api = api::with_ctx::<EntityApi>(ctx);
 
     let light_component = entity_api.lookup_component(hash(tm::TM_TT_TYPE__LIGHT_COMPONENT));
     let graph_component = entity_api.lookup_component(hash(tm::TM_TT_TYPE__GRAPH_COMPONENT));
 
-    api::get::<LogApi>().info(&format!("{:x}", hash(tm::TM_TT_TYPE__LIGHT_COMPONENT)));
-
-    /*const uint32_t cave_component = tm_entity_api->lookup_component(ctx, TM_TT_TYPE_HASH__CAVE_COMPONENT);
-    const uint32_t light_component = tm_entity_api->lookup_component(ctx, TM_TT_TYPE_HASH__LIGHT_COMPONENT);
-    const uint32_t graph_component = tm_entity_api->lookup_component(ctx, TM_TT_TYPE_HASH__GRAPH_COMPONENT);
-
-    const tm_engine_i cave_component_engine = {
-        .name = "Cave Component",
-        .num_components = 3,
-        .components = {cave_component, light_component, graph_component},
-        .writes = {false, true, false},
-        .update = engine_update__cave_component,
-        .filter = engine_filter__cave_component,
-        .inst = (tm_engine_o *)ctx,
+    let engine = Engine {
+        name: "Light Distance Component",
+        disabled: false,
+        num_components: 2,
+        components: &[light_component, graph_component],
+        excludes: &[false],
+        writes: &[true, false],
+        update: engine_update,
+        filter: engine_filter,
     };
-    tm_entity_api->register_engine(ctx, &cave_component_engine);*/
 
-    api::get::<LogApi>().info("Hej4");
+    entity_api.register_engine(engine);
 }
 
 #[no_mangle]
@@ -73,7 +89,13 @@ pub unsafe extern "C" fn tm_load_plugin(reg: *mut tm::tm_api_registry_api, load:
     api::register::<LogApi>(reg);
     api::register::<EntityApi>(reg);
 
-    api::get::<LogApi>().info("Hej3");
+    api::get::<LogApi>().info(&format!(
+        "Hej {}",
+        SystemTime::now()
+            .duration_since(SystemTime::UNIX_EPOCH)
+            .unwrap()
+            .as_secs()
+    ));
 
     reg.add_or_remove_implementation(
         load,
