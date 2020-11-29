@@ -1,4 +1,5 @@
 use std::{
+    marker::PhantomData,
     os::raw::c_char,
     slice,
     time::{Instant, SystemTime},
@@ -6,10 +7,12 @@ use std::{
 
 use tm_rs::{
     api,
+    component::{Components, GraphComponent, LightComponent, Read, Write},
     entity::{self, Engine},
     ffi as tm,
     ffi::tm_engine_i,
     ffi::tm_engine_o,
+    ffi::tm_engine_update_set_t,
     hash,
     registry::RegistryApi,
 };
@@ -17,8 +20,24 @@ use tm_rs::{entity::EntityApi, log::LogApi};
 
 static COMPONENT_NAME: &str = "light_distance_component";
 
-fn engine_update(data: *mut tm::tm_engine_update_set_t) {
+fn engine_update(components: *mut tm_engine_update_set_t) {
+    let components = Components::<(Write<LightComponent>, Read<GraphComponent>)> {
+        arrays: unsafe {
+            (*components)
+                .arrays
+                .as_mut_slice((*components).num_arrays as usize)
+        },
+        arrays_index: 0,
+        components_index: 0,
+        phantom_data: PhantomData,
+    };
+
+    //components: Components<(Write<LightComponent>, Read<GraphComponent>)>)
     api::get::<LogApi>().info("Update 2");
+
+    for (light, graph) in components {
+        api::get::<LogApi>().info(&format!("Light: {}", light.color_rgb.x));
+    }
 
     /*for (tm_engine_update_array_t *a = data->arrays; a < data->arrays + data->num_arrays; ++a)
     {
