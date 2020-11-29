@@ -4,7 +4,6 @@ use std::{
     slice,
     time::{Instant, SystemTime},
 };
-
 use tm_rs::{
     api,
     component::{Components, GraphComponent, LightComponent, Read, Write},
@@ -20,8 +19,8 @@ use tm_rs::{entity::EntityApi, log::LogApi};
 
 static COMPONENT_NAME: &str = "light_distance_component";
 
-fn engine_update(components: *mut tm_engine_update_set_t) {
-    let components = Components::<(Write<LightComponent>, Read<GraphComponent>)> {
+fn engine_update(components: Components<(Write<LightComponent>, Read<GraphComponent>)>) {
+    /*let components = Components::<(Write<LightComponent>, Read<GraphComponent>)> {
         arrays: unsafe {
             (*components)
                 .arrays
@@ -30,7 +29,7 @@ fn engine_update(components: *mut tm_engine_update_set_t) {
         arrays_index: 0,
         components_index: 0,
         phantom_data: PhantomData,
-    };
+    };*/
 
     //components: Components<(Write<LightComponent>, Read<GraphComponent>)>)
     api::get::<LogApi>().info("Update 2");
@@ -69,21 +68,11 @@ unsafe extern "C" fn register_engine(ctx: *mut tm::tm_entity_context_o) {
 
     let mut entity_api = api::with_ctx::<EntityApi>(ctx);
 
-    let light_component = entity_api.lookup_component(hash(tm::TM_TT_TYPE__LIGHT_COMPONENT));
-    let graph_component = entity_api.lookup_component(hash(tm::TM_TT_TYPE__GRAPH_COMPONENT));
-
-    let engine = Engine {
-        name: "Light Distance Component",
-        disabled: false,
-        num_components: 2,
-        components: &[light_component, graph_component],
-        excludes: &[false, false],
-        writes: &[true, false],
-        update: engine_update,
-        filter: Some(engine_filter),
-    };
-
-    entity_api.register_engine(engine);
+    entity_api.register_engine::<(Write<LightComponent>, Read<GraphComponent>)>(
+        "Light Distance Component",
+        engine_update,
+        Some(engine_filter),
+    );
 }
 
 #[no_mangle]
