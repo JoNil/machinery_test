@@ -1,9 +1,18 @@
-use std::time::SystemTime;
+use color_space::{FromColor, Hsv, Rgb};
+use std::{convert::TryInto, slice};
 use tm_rs::{
     api,
-    component::{ComponentsIterator, GraphComponent, LightComponent, Read, Write},
-    entity, ffi as tm,
+    component::{ComponentsIterator, Read, Write},
+    components::{graph::GraphComponent, light::LightComponent},
+    entity,
+    ffi::tm_api_registry_api,
+    ffi::tm_component_mask_t,
     ffi::tm_engine_update_set_t,
+    ffi::tm_entity_context_o,
+    ffi::tm_vec3_t,
+    ffi::TM_ENTITY_SIMULATION_INTERFACE_NAME,
+    graph_interpreter::GraphInterpreterApi,
+    hash,
     registry::RegistryApi,
 };
 use tm_rs::{entity::EntityApi, log::LogApi};
@@ -11,41 +20,40 @@ use tm_rs::{entity::EntityApi, log::LogApi};
 static COMPONENT_NAME: &str = "light_distance_component";
 
 fn engine_update(update_set: &mut tm_engine_update_set_t) {
+    let log = api::get::<LogApi>();
+
     let components =
         ComponentsIterator::<(Write<LightComponent>, Read<GraphComponent>)>::new(update_set);
 
-    api::get::<LogApi>().info("Update 2");
+    log.info("Update 4");
 
     for (light, graph) in components {
-        api::get::<LogApi>().info(&format!("Light: {}", light.color_rgb.x));
-    }
+        let mut graph = api::with_ctx::<GraphInterpreterApi>(graph.gr);
 
-    /*for (tm_engine_update_array_t *a = data->arrays; a < data->arrays + data->num_arrays; ++a)
-    {
-        struct tm_light_component_t *light_component = a->components[1];
-        struct tm_graph_component_t *graph_component = a->components[2];
+        let var = graph.read_variable(hash(b"Dist"));
 
-        for (uint32_t i = 0; i < a->n; ++i)
-        {
-            tm_graph_interpreter_wire_content_t dist_wire = tm_graph_interpreter_api->read_variable(graph_component[i].gr, GRAPH_DIST_HASH);
+        if !var.data.is_null() {
+            let data = unsafe { slice::from_raw_parts(var.data as *mut u8, var.size as usize) };
+            let distance_to_wall = f32::from_ne_bytes(data.try_into().unwrap());
 
-            if (dist_wire.data != NULL)
-            {
-                float distance_to_wall = *(float *)dist_wire.data;
-                float hue = (sinf(0.4f * distance_to_wall) + 1.0f) / 2.0f;
-                TM_LOG("HUE: %f", hue);
-                light_component[i].color_rgb = tm_hue_to_rgb(hue);
-            }
+            let hue = (f32::sin(0.4 * distance_to_wall) + 1.0) / 2.0;
+            log.info(&format!("HUE: {}", hue));
+            let color = Rgb::from_color(&Hsv::new((hue * 360.0) as f64, 1.0, 1.0));
+            light.color_rgb = tm_vec3_t {
+                x: color.r as f32,
+                y: color.g as f32,
+                z: color.b as f32,
+            };
         }
-    }*/
+    }
 }
 
-fn engine_filter(components: &[u32], mask: &tm::tm_component_mask_t) -> bool {
+fn engine_filter(components: &[u32], mask: &tm_component_mask_t) -> bool {
     entity::mask_has_component(mask, components[0])
         && entity::mask_has_component(mask, components[1])
 }
 
-unsafe extern "C" fn register_engine(ctx: *mut tm::tm_entity_context_o) {
+unsafe extern "C" fn register_engine(ctx: *mut tm_entity_context_o) {
     assert!(!ctx.is_null());
 
     let mut entity_api = api::with_ctx::<EntityApi>(ctx);
@@ -59,23 +67,16 @@ unsafe extern "C" fn register_engine(ctx: *mut tm::tm_entity_context_o) {
 
 #[no_mangle]
 #[allow(clippy::missing_safety_doc)]
-pub unsafe extern "C" fn tm_load_plugin(reg: *mut tm::tm_api_registry_api, load: bool) {
+pub unsafe extern "C" fn tm_load_plugin(reg: *mut tm_api_registry_api, load: bool) {
     assert!(!reg.is_null());
 
     api::register::<LogApi>(reg);
     api::register::<EntityApi>(reg);
-
-    api::get::<LogApi>().info(&format!(
-        "Hej {}",
-        SystemTime::now()
-            .duration_since(SystemTime::UNIX_EPOCH)
-            .unwrap()
-            .as_secs()
-    ));
+    api::register::<GraphInterpreterApi>(reg);
 
     reg.add_or_remove_implementation(
         load,
-        tm::TM_ENTITY_SIMULATION_INTERFACE_NAME,
+        TM_ENTITY_SIMULATION_INTERFACE_NAME,
         register_engine as _,
     );
 }

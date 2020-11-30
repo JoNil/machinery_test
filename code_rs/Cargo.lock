@@ -7,6 +7,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "33954243bd79057c2de7338850b85983a44588021f8a5fee574a8888c6de4344"
 
 [[package]]
+name = "color_space"
+version = "0.5.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3776b2bcc4e914db501bb9be9572dd706e344b9eb8f882894f3daa651d281381"
+
+[[package]]
 name = "lazy_static"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -31,5 +37,6 @@ checksum = "ed8ab22dd6ab71109ada60f77b33fd0b634818cb44cc282441be1b58e06156d8"
 name = "tm_code_rs"
 version = "0.1.0"
 dependencies = [
+ "color_space",
  "tm-rs",
 ]

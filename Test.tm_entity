@@ -80,12 +80,6 @@ children: [
 				}
 			}
 			{
-				__type: "tm_cave_component"
-				__uuid: "d388f457-95ab-895f-e673-63db57f0ca2f"
-				frequency: 20
-				amplitude: 3
-			}
-			{
 				__type: "tm_graph_component"
 				__uuid: "ca61c64f-b68e-53ec-db7c-f386b1b8137a"
 				graph: {
