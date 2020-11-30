@@ -1,37 +1,19 @@
-use std::{
-    marker::PhantomData,
-    os::raw::c_char,
-    slice,
-    time::{Instant, SystemTime},
-};
+use std::time::SystemTime;
 use tm_rs::{
     api,
-    component::{Components, GraphComponent, LightComponent, Read, Write},
-    entity::{self, Engine},
-    ffi as tm,
-    ffi::tm_engine_i,
-    ffi::tm_engine_o,
+    component::{ComponentsIterator, GraphComponent, LightComponent, Read, Write},
+    entity, ffi as tm,
     ffi::tm_engine_update_set_t,
-    hash,
     registry::RegistryApi,
 };
 use tm_rs::{entity::EntityApi, log::LogApi};
 
 static COMPONENT_NAME: &str = "light_distance_component";
 
-fn engine_update(components: Components<(Write<LightComponent>, Read<GraphComponent>)>) {
-    /*let components = Components::<(Write<LightComponent>, Read<GraphComponent>)> {
-        arrays: unsafe {
-            (*components)
-                .arrays
-                .as_mut_slice((*components).num_arrays as usize)
-        },
-        arrays_index: 0,
-        components_index: 0,
-        phantom_data: PhantomData,
-    };*/
+fn engine_update(update_set: &mut tm_engine_update_set_t) {
+    let components =
+        ComponentsIterator::<(Write<LightComponent>, Read<GraphComponent>)>::new(update_set);
 
-    //components: Components<(Write<LightComponent>, Read<GraphComponent>)>)
     api::get::<LogApi>().info("Update 2");
 
     for (light, graph) in components {
