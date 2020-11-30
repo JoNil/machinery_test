@@ -9,4 +9,4 @@ crate-type = ["cdylib"]
 
 [dependencies]
 color_space = "0.5"
-tm-rs = { path = "../../tm-rs" }
+tm-rs = "2020.11.7"
