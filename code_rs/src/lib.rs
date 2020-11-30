@@ -25,8 +25,6 @@ fn engine_update(update_set: &mut tm_engine_update_set_t) {
     let components =
         ComponentsIterator::<(Write<LightComponent>, Read<GraphComponent>)>::new(update_set);
 
-    log.info("Update 4");
-
     for (light, graph) in components {
         let mut graph = api::with_ctx::<GraphInterpreterApi>(graph.gr);
 
@@ -37,12 +35,12 @@ fn engine_update(update_set: &mut tm_engine_update_set_t) {
             let distance_to_wall = f32::from_ne_bytes(data.try_into().unwrap());
 
             let hue = (f32::sin(0.4 * distance_to_wall) + 1.0) / 2.0;
-            log.info(&format!("HUE: {}", hue));
-            let color = Rgb::from_color(&Hsv::new((hue * 360.0) as f64, 1.0, 1.0));
+            log.info(&format!("H: {}", hue));
+            let color = Rgb::from_color(&Hsv::new((hue * 360.0) as f64, 1.0, 0.6));
             light.color_rgb = tm_vec3_t {
-                x: color.r as f32,
-                y: color.g as f32,
-                z: color.b as f32,
+                x: color.r as f32 / 255.0,
+                y: color.g as f32 / 255.0,
+                z: color.b as f32 / 255.0,
             };
         }
     }
