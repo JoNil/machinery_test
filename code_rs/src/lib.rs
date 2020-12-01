@@ -1,5 +1,4 @@
 use color_space::{FromColor, Hsv, Rgb};
-use std::{convert::TryInto, slice};
 use tm_rs::{
     api,
     component::{ComponentsIterator, Read, Write},
@@ -12,7 +11,6 @@ use tm_rs::{
     ffi::tm_vec3_t,
     ffi::TM_ENTITY_SIMULATION_INTERFACE_NAME,
     graph_interpreter::GraphInterpreterApi,
-    hash,
     registry::RegistryApi,
 };
 use tm_rs::{entity::EntityApi, log::LogApi};
@@ -28,12 +26,7 @@ fn engine_update(update_set: &mut tm_engine_update_set_t) {
     for (light, graph) in components {
         let mut graph = api::with_ctx::<GraphInterpreterApi>(graph.gr);
 
-        let var = graph.read_variable(hash(b"Dist"));
-
-        if !var.data.is_null() {
-            let data = unsafe { slice::from_raw_parts(var.data as *mut u8, var.size as usize) };
-            let distance_to_wall = f32::from_ne_bytes(data.try_into().unwrap());
-
+        if let Some(distance_to_wall) = graph.read_variable_f32("Dist") {
             let hue = (f32::sin(0.4 * distance_to_wall) + 1.0) / 2.0;
             log.info(&format!("H: {}", hue));
             let color = Rgb::from_color(&Hsv::new((hue * 360.0) as f64, 1.0, 0.6));
