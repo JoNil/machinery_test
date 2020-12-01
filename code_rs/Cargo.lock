@@ -21,8 +21,6 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 [[package]]
 name = "tm-rs"
 version = "2020.11.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5119a097a6adff79b89a325c5175d733b7502aa28a798d45e9a82253e6c404aa"
 dependencies = [
  "anymap",
  "lazy_static",
@@ -31,9 +29,9 @@ dependencies = [
 
 [[package]]
 name = "tm-sys"
-version = "2020.11.2"
+version = "2020.11.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ed8ab22dd6ab71109ada60f77b33fd0b634818cb44cc282441be1b58e06156d8"
+checksum = "86941869b18dfeb28f6b1d061dac0d61a7f9ec7221a998348bf337809c6ff76b"
 
 [[package]]
 name = "tm_code_rs"

@@ -1,6 +1,7 @@
 use color_space::{FromColor, Hsv, Rgb};
 use tm_rs::{
     api,
+    tm_plugin,
     component::{ComponentsIterator, Read, Write},
     components::{graph::GraphComponent, light::LightComponent},
     entity,
@@ -56,18 +57,14 @@ unsafe extern "C" fn register_engine(ctx: *mut tm_entity_context_o) {
     );
 }
 
-#[no_mangle]
-#[allow(clippy::missing_safety_doc)]
-pub unsafe extern "C" fn tm_load_plugin(reg: *mut tm_api_registry_api, load: bool) {
-    assert!(!reg.is_null());
+tm_plugin!(|reg: &mut RegistryApi| {
 
     api::register::<LogApi>(reg);
     api::register::<EntityApi>(reg);
     api::register::<GraphInterpreterApi>(reg);
 
     reg.add_or_remove_implementation(
-        load,
         TM_ENTITY_SIMULATION_INTERFACE_NAME,
         register_engine as _,
     );
-}
+});
