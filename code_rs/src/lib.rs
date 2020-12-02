@@ -1,18 +1,14 @@
 use color_space::{FromColor, Hsv, Rgb};
 use tm_rs::{
-    api,
-    tm_plugin,
+    add_or_remove_entity_simulation, api,
     component::{ComponentsIterator, Read, Write},
     components::{graph::GraphComponent, light::LightComponent},
     entity,
-    ffi::tm_api_registry_api,
     ffi::tm_component_mask_t,
     ffi::tm_engine_update_set_t,
-    ffi::tm_entity_context_o,
     ffi::tm_vec3_t,
-    ffi::TM_ENTITY_SIMULATION_INTERFACE_NAME,
     graph_interpreter::GraphInterpreterApi,
-    registry::RegistryApi,
+    tm_plugin,
 };
 use tm_rs::{entity::EntityApi, log::LogApi};
 
@@ -45,26 +41,16 @@ fn engine_filter(components: &[u32], mask: &tm_component_mask_t) -> bool {
         && entity::mask_has_component(mask, components[1])
 }
 
-unsafe extern "C" fn register_engine(ctx: *mut tm_entity_context_o) {
-    assert!(!ctx.is_null());
-
-    let mut entity_api = api::with_ctx::<EntityApi>(ctx);
-
-    entity_api.register_engine::<(Write<LightComponent>, Read<GraphComponent>)>(
-        "Light Distance Component",
-        engine_update,
-        Some(engine_filter),
-    );
-}
-
 tm_plugin!(|reg: &mut RegistryApi| {
-
     api::register::<LogApi>(reg);
     api::register::<EntityApi>(reg);
     api::register::<GraphInterpreterApi>(reg);
 
-    reg.add_or_remove_implementation(
-        TM_ENTITY_SIMULATION_INTERFACE_NAME,
-        register_engine as _,
-    );
+    add_or_remove_entity_simulation!(reg, |entity_api: &mut EntityApiInstance| {
+        entity_api.register_engine::<(Write<LightComponent>, Read<GraphComponent>)>(
+            "Light Distance Component",
+            engine_update,
+            Some(engine_filter),
+        );
+    });
 });
