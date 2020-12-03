@@ -35,17 +35,17 @@ fn engine_update(
     }
 }
 
+fn engine_filter(components: &[u32], mask: &ComponentMask) -> bool {
+    entity::mask_has_component(mask, components[0])
+        && entity::mask_has_component(mask, components[1])
+}
+
 fn register_light_engine(entity_api: &mut EntityApiInstance) {
     entity_api.register_engine(
         "Light Distance Component",
         engine_update,
         Some(engine_filter),
     );
-}
-
-fn engine_filter(components: &[u32], mask: &ComponentMask) -> bool {
-    entity::mask_has_component(mask, components[0])
-        && entity::mask_has_component(mask, components[1])
 }
 
 tm_plugin!(|reg: &mut RegistryApi| {
