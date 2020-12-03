@@ -4,17 +4,19 @@ use tm_rs::{
     component::{ComponentsIterator, Read, Write},
     components::{graph::GraphComponent, light::LightComponent},
     entity,
-    ffi::tm_component_mask_t,
-    ffi::tm_engine_update_set_t,
-    ffi::tm_vec3_t,
+    entity::EntityApi,
+    entity::EntityApiInstance,
     graph_interpreter::GraphInterpreterApi,
-    tm_plugin,
+    log::LogApi,
+    tm_plugin, ComponentMask, Vec3,
 };
-use tm_rs::{entity::EntityApi, log::LogApi};
 
 static COMPONENT_NAME: &str = "light_distance_component";
 
-fn engine_update(components: ComponentsIterator<(Write<LightComponent>, Read<GraphComponent>)>) {
+fn engine_update(
+    entity_api: &mut EntityApiInstance,
+    components: ComponentsIterator<(Write<LightComponent>, Read<GraphComponent>)>,
+) {
     let log = api::get::<LogApi>();
 
     for (light, graph) in components {
@@ -24,7 +26,7 @@ fn engine_update(components: ComponentsIterator<(Write<LightComponent>, Read<Gra
             let hue = (f32::sin(0.4 * distance_to_wall) + 1.0) / 2.0;
             log.info(&format!("WOHOO: {}", hue));
             let color = Rgb::from_color(&Hsv::new((hue * 360.0) as f64, 1.0, 0.6));
-            light.color_rgb = tm_vec3_t {
+            light.color_rgb = Vec3 {
                 x: color.r as f32 / 255.0,
                 y: color.g as f32 / 255.0,
                 z: color.b as f32 / 255.0,
@@ -33,7 +35,7 @@ fn engine_update(components: ComponentsIterator<(Write<LightComponent>, Read<Gra
     }
 }
 
-fn engine_filter(components: &[u32], mask: &tm_component_mask_t) -> bool {
+fn engine_filter(components: &[u32], mask: &ComponentMask) -> bool {
     entity::mask_has_component(mask, components[0])
         && entity::mask_has_component(mask, components[1])
 }
