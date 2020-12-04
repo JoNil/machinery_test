@@ -10,12 +10,23 @@ use tm_rs::{
     log::LogApi,
     tm_plugin, ComponentMask, Vec3,
 };
+use tm_derive::Component;
 
-static COMPONENT_NAME: &str = "light_distance_component";
+#[derive(Copy, Clone, Default, Component)]
+struct LightDistanceComponent {
+    #[property(default = 1.0f)]
+    intensity: f32,
+
+    a: f32,
+}
 
 fn engine_update(
     entity_api: &mut EntityApiInstance,
-    components: ComponentsIterator<(Write<LightComponent>, Read<GraphComponent>)>,
+    components: ComponentsIterator<(
+        //Read<LightDistanceComponent>,
+        Write<LightComponent>,
+        Read<GraphComponent>,
+    )>,
 ) {
     let log = api::get::<LogApi>();
 
@@ -42,7 +53,7 @@ fn engine_filter(components: &[u32], mask: &ComponentMask) -> bool {
 
 fn register_light_engine(entity_api: &mut EntityApiInstance) {
     entity_api.register_engine(
-        "Light Distance Component",
+        "Light Distance Engine",
         engine_update,
         Some(engine_filter),
     );
@@ -53,5 +64,6 @@ tm_plugin!(|reg: &mut RegistryApi| {
     api::register::<EntityApi>(reg);
     api::register::<GraphInterpreterApi>(reg);
 
+    //add_or_remove_component!(reg, LightDistanceComponent);
     add_or_remove_entity_simulation!(reg, register_light_engine);
 });
