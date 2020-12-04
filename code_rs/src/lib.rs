@@ -1,4 +1,5 @@
 use color_space::{FromColor, Hsv, Rgb};
+use tm_derive::Component;
 use tm_rs::{
     add_or_remove_entity_simulation, api,
     component::{ComponentsIterator, Read, Write},
@@ -10,7 +11,6 @@ use tm_rs::{
     log::LogApi,
     tm_plugin, ComponentMask, Vec3,
 };
-use tm_derive::Component;
 
 #[derive(Copy, Clone, Default, Component)]
 struct LightDistanceComponent {
@@ -23,14 +23,14 @@ struct LightDistanceComponent {
 fn engine_update(
     entity_api: &mut EntityApiInstance,
     components: ComponentsIterator<(
-        //Read<LightDistanceComponent>,
+        Read<LightDistanceComponent>,
         Write<LightComponent>,
         Read<GraphComponent>,
     )>,
 ) {
     let log = api::get::<LogApi>();
 
-    for (light, graph) in components {
+    for (ld, light, graph) in components {
         let mut graph = api::with_ctx::<GraphInterpreterApi>(graph.gr);
 
         if let Some(distance_to_wall) = graph.read_variable_f32("Dist") {
@@ -52,11 +52,7 @@ fn engine_filter(components: &[u32], mask: &ComponentMask) -> bool {
 }
 
 fn register_light_engine(entity_api: &mut EntityApiInstance) {
-    entity_api.register_engine(
-        "Light Distance Engine",
-        engine_update,
-        Some(engine_filter),
-    );
+    entity_api.register_engine("Light Distance Engine", engine_update, Some(engine_filter));
 }
 
 tm_plugin!(|reg: &mut RegistryApi| {
