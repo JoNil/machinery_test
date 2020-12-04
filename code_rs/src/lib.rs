@@ -6,9 +6,10 @@ use tm_rs::{
     components::{graph::GraphComponent, light::LightComponent},
     entity,
     entity::EntityApi,
-    entity::EntityApiInstance,
+    entity::EntityApiInstanceMut,
     graph_interpreter::GraphInterpreterApi,
     log::LogApi,
+    the_truth::TheTruthApi,
     tm_plugin, ComponentMask, Vec3,
 };
 
@@ -21,7 +22,7 @@ struct LightDistanceComponent {
 }
 
 fn engine_update(
-    entity_api: &mut EntityApiInstance,
+    entity_api: &mut EntityApiInstanceMut,
     components: ComponentsIterator<(
         Read<LightDistanceComponent>,
         Write<LightComponent>,
@@ -31,7 +32,7 @@ fn engine_update(
     let log = api::get::<LogApi>();
 
     for (ld, light, graph) in components {
-        let mut graph = api::with_ctx::<GraphInterpreterApi>(graph.gr);
+        let mut graph = api::with_ctx_mut::<GraphInterpreterApi>(graph.gr);
 
         if let Some(distance_to_wall) = graph.read_variable_f32("Dist") {
             let hue = (f32::sin(0.4 * distance_to_wall) + 1.0) / 2.0;
@@ -51,13 +52,14 @@ fn engine_filter(components: &[u32], mask: &ComponentMask) -> bool {
         && entity::mask_has_component(mask, components[1])
 }
 
-fn register_light_engine(entity_api: &mut EntityApiInstance) {
+fn register_light_engine(entity_api: &mut EntityApiInstanceMut) {
     entity_api.register_engine("Light Distance Engine", engine_update, Some(engine_filter));
 }
 
 tm_plugin!(|reg: &mut RegistryApi| {
     api::register::<LogApi>(reg);
     api::register::<EntityApi>(reg);
+    api::register::<TheTruthApi>(reg);
     api::register::<GraphInterpreterApi>(reg);
 
     //add_or_remove_component!(reg, LightDistanceComponent);
