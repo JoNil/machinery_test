@@ -60,6 +60,7 @@ tm_plugin!(|reg: &mut RegistryApi| {
     api::register::<LogApi>(reg);
     api::register::<GraphInterpreterApi>(reg);
 
-    //add_or_remove_component!(reg, LightDistanceComponent);
+    reg.add_or_remove_component::<LightDistanceComponent>();
+    
     add_or_remove_entity_simulation!(reg, register_light_engine);
 });
