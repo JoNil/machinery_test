@@ -15,7 +15,7 @@ use tm_rs::{
 
 #[derive(Copy, Clone, Default, Component)]
 struct LightDistanceComponent {
-    #[property(default = 1.0f)]
+    #[property(default = 1.0)]
     intensity: f32,
 
     a: f32,
