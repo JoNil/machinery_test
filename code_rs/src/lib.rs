@@ -58,8 +58,6 @@ fn register_light_engine(entity_api: &mut EntityApiInstanceMut) {
 
 tm_plugin!(|reg: &mut RegistryApi| {
     api::register::<LogApi>(reg);
-    api::register::<EntityApi>(reg);
-    api::register::<TheTruthApi>(reg);
     api::register::<GraphInterpreterApi>(reg);
 
     //add_or_remove_component!(reg, LightDistanceComponent);
