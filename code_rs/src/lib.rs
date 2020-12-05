@@ -17,12 +17,10 @@ use tm_rs::{
 struct LightDistanceComponent {
     #[property(default = 1.0)]
     intensity: f32,
-
-    a: f32,
 }
 
 fn engine_update(
-    entity_api: &mut EntityApiInstanceMut,
+    _entity_api: &mut EntityApiInstanceMut,
     components: ComponentsIterator<(
         Read<LightDistanceComponent>,
         Write<LightComponent>,
@@ -36,8 +34,8 @@ fn engine_update(
 
         if let Some(distance_to_wall) = graph.read_variable_f32("Dist") {
             let hue = (f32::sin(0.4 * distance_to_wall) + 1.0) / 2.0;
-            log.info(&format!("WOHOO: {}", hue));
-            let color = Rgb::from_color(&Hsv::new((hue * 360.0) as f64, 1.0, 0.6));
+            log.info(&format!("WOHOO: {} {}", hue, ld.intensity));
+            let color = Rgb::from_color(&Hsv::new((hue * 360.0) as f64, 1.0, ld.intensity as f64));
             light.color_rgb = Vec3 {
                 x: color.r as f32 / 255.0,
                 y: color.g as f32 / 255.0,

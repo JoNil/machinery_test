@@ -32,6 +32,18 @@
 		]
 	}
 	{
+		name: "light_distance_component"
+		properties: [
+			{
+				name: "intensity"
+				type: "float"
+			}
+		]
+		default: {
+			intensity: 1
+		}
+	}
+	{
 		name: "lit_default_node_settings"
 		properties: [
 			{

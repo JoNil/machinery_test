@@ -279,6 +279,11 @@ children: [
 					}
 				}
 			}
+			{
+				__type: "light_distance_component"
+				__uuid: "ae250ae0-7f37-581b-a394-8226c0f90230"
+				intensity: 0.5
+			}
 		]
 		children: [
 			{
@@ -350,4 +355,3 @@ children: [
 		sort_order: 100
 	}
 ]
-__asset_uuid: "79dc82c7-43b5-e964-251b-a28ffda37f72"
