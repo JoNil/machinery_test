@@ -4,13 +4,11 @@ use tm_rs::{
     add_or_remove_entity_simulation, api,
     component::{ComponentsIterator, Read, Write},
     components::{graph::GraphComponent, light::LightComponent},
-    entity,
-    entity::EntityApi,
-    entity::EntityApiInstanceMut,
+    entity::{EntityApi, EntityApiInstanceMut},
     graph_interpreter::GraphInterpreterApi,
     log::LogApi,
     the_truth::TheTruthApi,
-    tm_plugin, ComponentMask, Vec3,
+    tm_plugin, Vec3,
 };
 
 #[derive(Copy, Clone, Default, Component)]
@@ -45,13 +43,8 @@ fn engine_update(
     }
 }
 
-fn engine_filter(components: &[u32], mask: &ComponentMask) -> bool {
-    entity::mask_has_component(mask, components[0])
-        && entity::mask_has_component(mask, components[1])
-}
-
 fn register_light_engine(entity_api: &mut EntityApiInstanceMut) {
-    entity_api.register_engine("Light Distance Engine", engine_update, Some(engine_filter));
+    entity_api.register_engine("Light Distance Engine", engine_update);
 }
 
 tm_plugin!(|reg: &mut RegistryApi| {

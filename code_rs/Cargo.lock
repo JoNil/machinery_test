@@ -108,6 +108,8 @@ dependencies = [
 [[package]]
 name = "tm-derive"
 version = "2020.11.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "033c7cdd6ebb895121e245f6613129739e40695aaa9ad8df49c0bba99fbe9c6f"
 dependencies = [
  "Inflector",
  "proc-macro2",
@@ -117,7 +119,9 @@ dependencies = [
 
 [[package]]
 name = "tm-rs"
-version = "2020.11.10"
+version = "2020.11.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "48fc3fa5b5ab4c89eff9ad92b674e930a2a0da07d57b90c6b4fdf825f0002cba"
 dependencies = [
  "anymap",
  "lazy_static",
