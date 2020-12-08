@@ -2,12 +2,12 @@ use color_space::{FromColor, Hsv, Rgb};
 use tm_derive::Component;
 use tm_rs::{
     add_or_remove_entity_simulation, api,
+    api::entity::{EntityApi, EntityApiInstanceMut},
+    api::graph_interpreter::GraphInterpreterApi,
+    api::log::LogApi,
+    api::the_truth::TheTruthApi,
+    component::{graph::GraphComponent, light::LightComponent},
     component::{ComponentsIterator, Read, Write},
-    components::{graph::GraphComponent, light::LightComponent},
-    entity::{EntityApi, EntityApiInstanceMut},
-    graph_interpreter::GraphInterpreterApi,
-    log::LogApi,
-    the_truth::TheTruthApi,
     tm_plugin, Vec3,
 };
 
@@ -27,7 +27,7 @@ fn engine_update(
 ) {
     let log = api::get::<LogApi>();
 
-    for (ld, light, graph) in components {
+    for (entity, ld, light, graph) in components {
         let mut graph = api::with_ctx_mut::<GraphInterpreterApi>(graph.gr);
 
         if let Some(distance_to_wall) = graph.read_variable_f32("Dist") {
